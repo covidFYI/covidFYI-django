@@ -31,6 +31,7 @@ class StateListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ('state',)
+        read_only_fields = fields
 
 class StateRetrieveSerializer(serializers.ModelSerializer):
     
@@ -43,6 +44,7 @@ class StateRetrieveSerializer(serializers.ModelSerializer):
         model = Location
         exclude = ('state',)
         # extra_fields = ('district',)
+        read_only_fields = [f.name for f in Location._meta.get_fields()]
 
     def get_entries(self, obj):
 

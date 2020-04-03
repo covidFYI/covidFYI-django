@@ -5,9 +5,9 @@ from .models import Location, Entry, InfoType
 from .serializers import StateListSerializer, StateRetrieveSerializer, InfoTypeSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics, views
 
-class StateViewSet(viewsets.ViewSet):
+class StateViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
 
     def list(self, request):
@@ -19,25 +19,25 @@ class StateViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, state_name):
 
-        # locs_queryset = Location.objects.filter(state=state_name)
         locs_queryset = Location.objects.filter(state=state_name).order_by('district').prefetch_related('entries').all()
-        # entries = Entry.objects.filter(location__in=locs_queryset)
         serializer = StateRetrieveSerializer(locs_queryset, many=True)
 
         return Response(serializer.data)
 
-class InfoTypeViewSet(generics.ListAPIView):
+class InfoTypeStatesView(views.APIView):
 
     permission_classes = [AllowAny]
-    queryset = InfoType.objects.all()
-    serializer_class = InfoTypeSerializer
 
-    # def get(self, request):
-    #     queryset = self.get_queryset()
-    #     import pdb; pdb.set_trace()
-    #     serializer = InfoTypeSerializer(queryset, many=True)
-    #     return Response(serializer.data)
+    def get(self, request):
 
-# def IntoTypeListView(view.APIView):
+        response   = []
+        info_types = InfoType.objects.all()
 
-#     def get(self, request)""
+        for info_type in info_types:
+            response.append({
+                'info_type' : info_type.name,
+                'states'    : list(info_type.entries.distinct('location__state').\
+                                    all().values_list('location__state', flat=True))
+            })
+
+        return Response(response)
