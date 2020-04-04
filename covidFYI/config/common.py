@@ -65,12 +65,12 @@ class Common(Configuration):
     )
 
     # Postgres
-    # DATABASES = {
-    #     'default': dj_database_url.config(
-    #         default='postgres://postgres:postgres@127.0.0.1:5432/covid',
-    #         conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
-    #     )
-    # }
+    DATABASES = {
+        'default': dj_database_url.config(
+            default='postgres://postgres:postgres@127.0.0.1:5432/covid',
+            conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
+        )
+    }
 
     DATABASES = {}
     db_from_env = dj_database_url.config(conn_max_age=600)
