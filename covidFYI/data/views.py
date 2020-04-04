@@ -9,6 +9,7 @@ from rest_framework import generics, views
 
 class StateViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
+    queryset = ''
 
     def list(self, request):
 
