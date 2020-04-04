@@ -23,7 +23,7 @@ class Common(Configuration):
         'django_extensions',      # utilities for rest apis
         # 'rest_framework.authtoken',  # token authentication
         'django_filters',            # for filtering rest endpoints
-        'django_apscheduler',
+        # 'django_apscheduler',
         # Your apps
         'covidFYI.users',
         # 'covidFYI.data',
