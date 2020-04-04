@@ -16,6 +16,9 @@ django_unique_upload==0.2.1
 # extensions
 django-extensions==2.2.9    
 
+# apscheduler for scheduling
+APScheduler==3.6.3
+
 # Rest apis
 djangorestframework==3.11.0
 Markdown==3.1.1
