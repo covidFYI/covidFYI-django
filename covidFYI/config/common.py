@@ -23,10 +23,11 @@ class Common(Configuration):
         'django_extensions',      # utilities for rest apis
         # 'rest_framework.authtoken',  # token authentication
         'django_filters',            # for filtering rest endpoints
-
+        'django_apscheduler',
         # Your apps
         'covidFYI.users',
-        'covidFYI.data',
+        # 'covidFYI.data',
+        'covidFYI.data.apps.DataConfig',
 
     )
 
@@ -64,12 +65,15 @@ class Common(Configuration):
     )
 
     # Postgres
-    DATABASES = {
-        'default': dj_database_url.config(
-            default='postgres://postgres:postgres@127.0.0.1:5432/covid',
-            conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
-        )
-    }
+    # DATABASES = {
+    #     'default': dj_database_url.config(
+    #         default='postgres://postgres:postgres@127.0.0.1:5432/covid',
+    #         conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
+    #     )
+    # }
+
+    db_from_env = dj_database_url.config(conn_max_age=600)
+    DATABASES['default'].update(db_from_env)
 
     # General
     APPEND_SLASH = False

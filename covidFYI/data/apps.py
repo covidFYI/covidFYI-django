@@ -2,4 +2,11 @@ from django.apps import AppConfig
 
 
 class DataConfig(AppConfig):
-    name = 'data'
+    name = 'covidFYI.data'
+
+    def ready(self):
+        
+        from covidFYI.data import schedule
+        # schedule.start()
+
+        print("App ready!")
