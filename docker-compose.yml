@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "development"
+      POSTGRES_DB: "dev"
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - "local_db:/var/lib/postgresql/data"
@@ -18,11 +18,11 @@ services:
 
   web:
     environment:
-      PORT: 8000
+      # PORT: 8000
       DJANGO_SECRET_KEY: "local"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "development"
+      POSTGRES_DB: "dev"
       DATABASE_URL: "postgres"
       DATABASE_PORT: "5432"
 
@@ -32,6 +32,11 @@ services:
     #   bash -c "python wait_for_postgres.py &&
     #   ./manage.py migrate &&
     #   ./manage.py runserver 0.0.0.0:8000"
+    command : >
+      bash -c "python wait_for_postgres.py &&
+      ./manage.py migrate &&
+      ./manage.py runscript load_data &&
+      newrelic-admin run-program gunicorn --bind 0.0.0.0:8000 --access-logfile - covidFYI.wsgi:application"
     volumes:
       - "./:/code"
     ports:
@@ -39,11 +44,11 @@ services:
     depends_on:
       - "postgres"
 
-  documentation:
-    restart: "always"
-    build: "./"
-    command: "mkdocs serve"
-    volumes:
-      - "./:/code"
-    ports:
-      - "8001:8001"
+  # documentation:
+  #   restart: "always"
+  #   build: "./"
+  #   command: "mkdocs serve"
+  #   volumes:
+  #     - "./:/code"
+  #   ports:
+  #     - "8001:8001"

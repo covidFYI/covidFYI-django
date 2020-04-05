@@ -4,6 +4,10 @@ import csv
 
 def run():
 
+    # If data already populated
+    if Entry.objects.all().count() > 0:
+        return
+
     with open('covid_data.csv') as f:
         reader = csv.reader(f)
         l = tuple(reader)

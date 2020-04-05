@@ -10,7 +10,7 @@ CSV_NAME = 'new_csv.csv'
 def start():
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=download_csv, trigger="interval", seconds=5)
+    scheduler.add_job(func=download_csv, trigger="interval", seconds=10)
     scheduler.start()
     print("Scheduler started!")
 

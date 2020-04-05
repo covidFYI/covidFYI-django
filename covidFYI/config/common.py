@@ -75,7 +75,7 @@ class Common(Configuration):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB", "development"),
+            "NAME": os.getenv("POSTGRES_DB", "dev"),
             "USER": os.getenv("POSTGRES_USER", "postgres"),
             "HOST": os.getenv("DATABASE_URL", "postgres"),
             "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
