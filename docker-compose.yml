@@ -1,29 +1,49 @@
-version: '2'
+version: '3'
+
+volumes:
+  local_db:
 
 services:
   postgres:
-    image: postgres:11.6
-  web:
-    restart: always
+    image: "postgres:12-alpine"
     environment:
-      - DJANGO_SECRET_KEY=local
-    image: web
-    build: ./
-    command: >
-      bash -c "python wait_for_postgres.py &&
-               ./manage.py migrate &&
-               ./manage.py runserver 0.0.0.0:8000"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "development"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
-      - ./:/code
+      - "local_db:/var/lib/postgresql/data"
+    ports:
+      - "8002:5432"
+
+  web:
+    environment:
+      PORT: 8000
+      DJANGO_SECRET_KEY: "local"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "development"
+      DATABASE_URL: "postgres"
+      DATABASE_PORT: "5432"
+
+    image: "web"
+    build: ./
+    # command: >
+    #   bash -c "python wait_for_postgres.py &&
+    #   ./manage.py migrate &&
+    #   ./manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - "./:/code"
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
+      - "postgres"
+
   documentation:
-    restart: always
-    build: ./
+    restart: "always"
+    build: "./"
     command: "mkdocs serve"
     volumes:
-      - ./:/code
+      - "./:/code"
     ports:
       - "8001:8001"

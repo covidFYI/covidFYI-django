@@ -65,16 +65,28 @@ class Common(Configuration):
     )
 
     # Postgres
+    # DATABASES = {
+    #     'default': dj_database_url.config(
+    #         default='postgres://postgres:postgres@postgres:5432/development',
+    #         conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
+    #     )
+    # }
+
     DATABASES = {
-        'default': dj_database_url.config(
-            default='postgres://postgres:postgres@127.0.0.1:5432/covid',
-            conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
-        )
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB", "development"),
+            "USER": os.getenv("POSTGRES_USER", "postgres"),
+            "HOST": os.getenv("DATABASE_URL", "postgres"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
+            "PORT": os.getenv("DATABASE_PORT", "5432"),
+            "TEST": {"NAME": "test"},
+        }
     }
 
-    DATABASES = {}
-    db_from_env = dj_database_url.config(conn_max_age=600)
-    DATABASES['default'] = db_from_env
+    # DATABASES = {}
+    # db_from_env = dj_database_url.config(conn_max_age=600)
+    # DATABASES['default'] = db_from_env
 
     # General
     APPEND_SLASH = False
