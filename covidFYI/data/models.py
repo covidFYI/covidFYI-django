@@ -1,6 +1,5 @@
 from django.db import models
-from datetime import datetime
-
+from django.utils.timezone import now
 # Create your models here.
 class InfoType(models.Model):
 
@@ -35,7 +34,7 @@ class Entry(models.Model):
     source      = models.EmailField(max_length=128, null=True)
     details     = models.EmailField(max_length=1024, null=True)
     # added_on    = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    added_on    = models.DateTimeField(default=datetime.now, null=False)
+    added_on    = models.DateTimeField(default=now, null=False)
 
     def __str__(self):
 
