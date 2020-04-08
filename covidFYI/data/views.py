@@ -9,11 +9,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics, views
 
+VIEW_CACHE_TIME = 60*60
+
 class StateViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     queryset = ''
 
-    @method_decorator(cache_page(15))
+    @method_decorator(cache_page(VIEW_CACHE_TIME))
     def list(self, request):
 
         queryset   = Location.objects.distinct('state')
@@ -31,14 +33,14 @@ class StateViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = StateRetrieveSerializer(locs_queryset, many=True)
 
         response = serializer.data
-        cache.set(state_name, response, 15)
+        cache.set(state_name, response, VIEW_CACHE_TIME)
         return Response(response)
 
 class InfoTypeStatesView(views.APIView):
 
     permission_classes = [AllowAny]
 
-    @method_decorator(cache_page(15))
+    @method_decorator(cache_page(VIEW_CACHE_TIME))
     def get(self, request):
 
         response   = []
