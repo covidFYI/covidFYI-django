@@ -36,7 +36,7 @@ class InfoTypeStatesView(views.APIView):
 
         for info_type in info_types:
             response.append({
-                'info_type' : info_type.name,
+                'info_type' : InfoTypeSerializer(info_type).data,
                 'states'    : list(info_type.entries.distinct('location__state').\
                                     all().values_list('location__state', flat=True))
             })

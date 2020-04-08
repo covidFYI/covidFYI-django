@@ -5,7 +5,7 @@ class InfoTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InfoType
-        fields = ('name',)
+        fields = ('name', 'description', 'icon_name', 'active',)
 
 class LocationSerializer(serializers.ModelSerializer):
 
