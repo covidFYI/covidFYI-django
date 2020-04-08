@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from rest_framework import viewsets
 from .models import Location, Entry, InfoType
@@ -22,10 +23,16 @@ class StateViewSet(viewsets.ReadOnlyModelViewSet):
 
     def retrieve(self, request, state_name):
 
+        response = cache.get(state_name, None)
+        if response is not None:
+            return Response(response)
+        
         locs_queryset = Location.objects.filter(state=state_name).order_by('district').prefetch_related('entries').all()
         serializer = StateRetrieveSerializer(locs_queryset, many=True)
 
-        return Response(serializer.data)
+        response = serializer.data
+        cache.set(state_name, response, 15)
+        return Response(response)
 
 class InfoTypeStatesView(views.APIView):
 
