@@ -1,5 +1,5 @@
 from django.shortcuts import render
-# from rest_framework import generics
+from django.views.decorators.cache import cache_page
 from rest_framework import viewsets
 from .models import Location, Entry, InfoType
 from .serializers import StateListSerializer, StateRetrieveSerializer, InfoTypeSerializer
@@ -11,6 +11,7 @@ class StateViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     queryset = ''
 
+    @cache_page(15)
     def list(self, request):
 
         queryset   = Location.objects.distinct('state')
@@ -29,6 +30,7 @@ class InfoTypeStatesView(views.APIView):
 
     permission_classes = [AllowAny]
 
+    @cache_page(15)
     def get(self, request):
 
         response   = []
