@@ -1,10 +1,13 @@
 from django.db import models
-from datetime import datetime
+from django.utils.timezone import now
 
 # Create your models here.
 class InfoType(models.Model):
 
     name = models.CharField(max_length = 128, null=False)
+    description = models.CharField(max_length = 256, null=False, blank=True)
+    icon_name = models.CharField(max_length = 128, null=False, blank=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
 
@@ -32,10 +35,11 @@ class Entry(models.Model):
     phone_2     = models.EmailField(max_length=128, null=True)
     extension   = models.EmailField(max_length=128, null=True)
     source_link = models.EmailField(max_length=128, null=True)
+    source_link_valid = models.BooleanField(default=True)
     source      = models.EmailField(max_length=128, null=True)
     details     = models.EmailField(max_length=1024, null=True)
     # added_on    = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    added_on    = models.DateTimeField(default=datetime.now, null=False)
+    added_on    = models.DateTimeField(default=now, null=False)
 
     def __str__(self):
 

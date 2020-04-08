@@ -12,7 +12,7 @@ from .users.views import UserViewSet, UserCreateViewSet
 # router.register(r'users', UserCreateViewSet)
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('api/v1/', include('covidFYI.data.urls')),
     # path('api/v1/', include(router.urls)),
     # path('api-token-auth/', views.obtain_auth_token),
