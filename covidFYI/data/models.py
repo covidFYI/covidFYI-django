@@ -34,7 +34,7 @@ class Entry(models.Model):
     phone_1     = models.EmailField(max_length=128, null=True)
     phone_2     = models.EmailField(max_length=128, null=True)
     extension   = models.EmailField(max_length=128, null=True)
-    source_link = models.EmailField(max_length=128, null=True)
+    source_link = models.EmailField(max_length=256, null=True)
     source_link_valid = models.BooleanField(default=True)
     source      = models.EmailField(max_length=128, null=True)
     details     = models.EmailField(max_length=1024, null=True)
