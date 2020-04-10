@@ -2,7 +2,7 @@ from django.shortcuts import render
 # from rest_framework import generics
 from rest_framework import viewsets
 from .models import Location, Entry, InfoType
-from .serializers import StateListSerializer, StateRetrieveSerializer, InfoTypeSerializer
+from .serializers import StateListSerializer, StateRetrieveSerializer, InfoTypeSerializer, EntrySerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics, views
@@ -23,6 +23,15 @@ class StateViewSet(viewsets.ReadOnlyModelViewSet):
         locs_queryset = Location.objects.filter(state=state_name).order_by('district').prefetch_related('entries').all()
         serializer = StateRetrieveSerializer(locs_queryset, many=True)
 
+        return Response(serializer.data)
+
+class InfoTypeRelatedData(views.APIView):
+
+    permission_classes = [AllowAny]
+    
+    def get(self, request, state_name, info_type):
+        queryset = Entry.objects.filter(location__state=state_name, infotype__name=info_type)
+        serializer = EntrySerializer(queryset, many=True)
         return Response(serializer.data)
 
 class InfoTypeStatesView(views.APIView):
