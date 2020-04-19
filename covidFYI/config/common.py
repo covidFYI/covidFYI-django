@@ -23,10 +23,8 @@ class Common(Configuration):
         'django_extensions',      # utilities for rest apis
         # 'rest_framework.authtoken',  # token authentication
         'django_filters',            # for filtering rest endpoints
-        # 'django_apscheduler',
         # Your apps
         'covidFYI.users',
-        # 'covidFYI.data',
         'covidFYI.data.apps.DataConfig',
 
     )
@@ -48,13 +46,14 @@ class Common(Configuration):
     SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
     WSGI_APPLICATION = 'covidFYI.wsgi.application'
 
-    CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ORIGIN_ALLOW_ALL = False
     CORS_ALLOW_CREDENTIALS = True
 
     CORS_ORIGIN_WHITELIST = [
-        'http://localhost:3000',
-        'http://localhost:8000',
-        'http://localhost:8080',
+        'https://covidfyi.in',
+        # 'http://localhost:3000',
+        # 'http://localhost:8000',
+        # 'http://localhost:8080',
     ]
 
     # Email
@@ -84,9 +83,18 @@ class Common(Configuration):
         }
     }
 
-    # DATABASES = {}
-    # db_from_env = dj_database_url.config(conn_max_age=600)
-    # DATABASES['default'] = db_from_env
+    # Redis caching
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": f"redis://{os.getenv('REDIS_HOST', '127.0.0.1')}:6379/1",
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient"
+            },
+            "KEY_PREFIX": "covidfyi"
+        }
+    }
+
 
     # General
     APPEND_SLASH = False
