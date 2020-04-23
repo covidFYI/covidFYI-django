@@ -4,7 +4,7 @@ from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from rest_framework import viewsets
 from .models import Location, Entry, InfoType
-from .serializers import StateListSerializer, StateRetrieveSerializer, InfoTypeSerializer
+from .serializers import StateListSerializer, StateRetrieveSerializer, InfoTypeSerializer, EntrySerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics, views
@@ -35,6 +35,15 @@ class StateViewSet(viewsets.ReadOnlyModelViewSet):
         response = serializer.data
         cache.set(state_name, response, VIEW_CACHE_TIME)
         return Response(response)
+
+class InfoTypeRelatedData(views.APIView):
+
+    permission_classes = [AllowAny]
+    
+    def get(self, request, state_name, info_type):
+        queryset = Entry.objects.filter(location__state=state_name, infotype__name=info_type)
+        serializer = EntrySerializer(queryset, many=True)
+        return Response(serializer.data)
 
 class InfoTypeStatesView(views.APIView):
 
